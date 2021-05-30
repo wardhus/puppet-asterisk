@@ -86,6 +86,8 @@
 #   value` in the `[global]` section of the `modules.conf` file.
 # @param manager_enable
 #   Set this to false to disable asterisk manager.
+# @param manager_webenable
+#   Set this to false to disable asterisk manager webinterface.
 # @param manager_port
 #   Port number on which asterisk will listen to for manager connections.
 #   Defaults to 5038.
@@ -115,6 +117,7 @@ class asterisk (
   Array[String]                  $modules_load            = $asterisk::params::modules_load,
   Hash                           $modules_global          = {},
   Boolean                        $manager_enable          = true,
+  Boolean                        $manager_webenable       = true,
   Integer                        $manager_port            = 5038,
   String                         $manager_bindaddr        = '127.0.0.1',
 ) inherits asterisk::params {
@@ -147,6 +150,7 @@ class asterisk (
   )
   $real_modules_autoload = bool2str($modules_autoload, 'yes', 'no')
   $real_manager_enable = bool2str($manager_enable, 'yes', 'no')
+  $real_manager_webenable = bool2str($manager_webenable, 'yes', 'no')
 
   contain asterisk::install
   contain asterisk::config

@@ -73,6 +73,7 @@ class asterisk::config {
   }
 
   $manager_enable = $asterisk::real_manager_enable
+  $manager_webenable = $asterisk::real_manager_webenable
   $manager_port = $asterisk::manager_port
   $manager_bindaddr = $asterisk::manager_bindaddr
   asterisk::dotd { "${asterisk::confdir}/manager":
