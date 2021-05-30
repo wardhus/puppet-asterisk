@@ -26,20 +26,26 @@ class asterisk::config {
     ],
   }
 
+  file { $asterisk::confdir:
+    ensure => directory,
+    recurse => true,
+    purge   => true,
+  }
+
   $iax_general = $asterisk::real_iax_general
-  asterisk::dotd { '/etc/asterisk/iax':
+  asterisk::dotd { "${asterisk::confdir}/iax":
     additional_paths => ['/etc/asterisk/iax.registry.d'],
     content          => template('asterisk/iax.conf.erb'),
   }
 
   $sip_general = $asterisk::real_sip_general
-  asterisk::dotd { '/etc/asterisk/sip':
+  asterisk::dotd { "${asterisk::confdir}/sip":
     additional_paths => ['/etc/asterisk/sip.registry.d'],
     content          => template('asterisk/sip.conf.erb'),
   }
 
   $voicemail_general = $asterisk::real_voicemail_general
-  asterisk::dotd { '/etc/asterisk/voicemail':
+  asterisk::dotd { "${asterisk::confdir}/voicemail":
     content => template('asterisk/voicemail.conf.erb'),
   }
 
@@ -47,34 +53,34 @@ class asterisk::config {
     general => $asterisk::real_extensions_general,
     globals => $asterisk::extensions_globals,
   }
-  asterisk::dotd { '/etc/asterisk/extensions':
+  asterisk::dotd { "${asterisk::confdir}/extensions":
     content => epp('asterisk/extensions.conf.epp', $ext_context),
   }
 
   $agents_multiplelogin = $asterisk::real_agents_multiplelogin
-  asterisk::dotd { '/etc/asterisk/agents':
+  asterisk::dotd { "${asterisk::confdir}/agents":
     content => template('asterisk/agents.conf.erb'),
   }
 
   $features_general = $asterisk::real_features_general
-  asterisk::dotd { '/etc/asterisk/features':
+  asterisk::dotd { "${asterisk::confdir}/features":
     content          => template('asterisk/features.conf.erb'),
   }
 
   $queues_general = $asterisk::real_queues_general
-  asterisk::dotd { '/etc/asterisk/queues':
+  asterisk::dotd { "${asterisk::confdir}/queues":
     content => template('asterisk/queues.conf.erb'),
   }
 
   $manager_enable = $asterisk::real_manager_enable
   $manager_port = $asterisk::manager_port
   $manager_bindaddr = $asterisk::manager_bindaddr
-  asterisk::dotd { '/etc/asterisk/manager':
+  asterisk::dotd { "${asterisk::confdir}/manager":
     content => template('asterisk/manager.conf.erb'),
   }
 
   $modules_autoload = $asterisk::real_modules_autoload
-  file { '/etc/asterisk/modules.conf' :
+  file { "${asterisk::confdir}/modules.conf" :
     ensure  => present,
     content => template('asterisk/modules.conf.erb'),
     owner   => 'root',
