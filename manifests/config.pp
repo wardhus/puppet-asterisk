@@ -27,9 +27,9 @@ class asterisk::config {
   }
 
   file { $asterisk::confdir:
-    ensure => directory,
-    recurse => true,
-    purge   => true,
+    ensure  => directory,
+    recurse => $asterisk::purge_confdir,
+    purge   => $asterisk::purge_confdir,
   }
 
   $iax_general = $asterisk::real_iax_general

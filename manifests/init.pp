@@ -105,6 +105,7 @@ class asterisk (
   Variant[String, Array[String]] $package_name            = $asterisk::params::package_name,
   String                         $service_name            = 'asterisk',
   Stdlib::Absolutepath           $confdir                 = '/etc/asterisk',
+  Boolean                        $purge_confdir           = false,
   Hash                           $iax_general             = {},
   Hash                           $sip_general             = {},
   Hash                           $voicemail_general       = {},
