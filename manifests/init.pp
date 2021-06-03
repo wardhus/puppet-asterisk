@@ -87,13 +87,17 @@
 # @param manager_enable
 #   Set this to false to disable asterisk manager.
 # @param manager_webenable
-#   Set this to false to disable asterisk manager webinterface.
+#   Set this to true to enable asterisk manager webinterface.
 # @param manager_port
 #   Port number on which asterisk will listen to for manager connections.
 #   Defaults to 5038.
 # @param manager_bindaddr
 #   IP address to have asterisk bind to for manager connections. Defaults to
 #   binding to localhost.
+# @param http_enable
+#   Set this to true to enable asterisk mini http server.
+# @param http_servername
+#   Set the mini http server's server name
 #
 class asterisk (
   Boolean                        $manage_service          = true,
