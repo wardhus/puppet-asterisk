@@ -53,6 +53,12 @@ class asterisk::config {
     content => template('asterisk/followme.conf.erb'),
   }
 
+  $http_enable = $asterisk::real_http_enable
+  $http_servername = $asterisk::servername
+  asterisk::dotd { "${asterisk::confdir}/http":
+    content => template('asterisk/http.conf.erb'),
+  }
+
   $ext_context = {
     general => $asterisk::real_extensions_general,
     globals => $asterisk::extensions_globals,

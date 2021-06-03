@@ -117,9 +117,11 @@ class asterisk (
   Array[String]                  $modules_load            = $asterisk::params::modules_load,
   Hash                           $modules_global          = {},
   Boolean                        $manager_enable          = true,
-  Boolean                        $manager_webenable       = true,
+  Boolean                        $manager_webenable       = false,
   Integer                        $manager_port            = 5038,
   String                         $manager_bindaddr        = '127.0.0.1',
+  Boolean                        $http_enable             = false,
+  String                         $http_servername         = 'asterisk'
 ) inherits asterisk::params {
 
   # We'll only ensure the type of some of the *_general on which templates iterate
@@ -151,6 +153,8 @@ class asterisk (
   $real_modules_autoload = bool2str($modules_autoload, 'yes', 'no')
   $real_manager_enable = bool2str($manager_enable, 'yes', 'no')
   $real_manager_webenable = bool2str($manager_webenable, 'yes', 'no')
+
+  $real_http_enable = bool2str($http_enable, 'yes', 'no')
 
   contain asterisk::install
   contain asterisk::config
