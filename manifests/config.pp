@@ -49,6 +49,10 @@ class asterisk::config {
     content => template('asterisk/voicemail.conf.erb'),
   }
 
+  asterisk::dotd { "${asterisk::confdir}/followme":
+    content => template('asterisk/followme.conf.erb'),
+  }
+
   $ext_context = {
     general => $asterisk::real_extensions_general,
     globals => $asterisk::extensions_globals,

@@ -1,0 +1,8 @@
+; THIS FILE IS MANAGED BY PUPPET
+; all local modifications will be lost
+[<%= @follwme_name %>]
+music = <%= @music %>
+context = <%= @context %>
+<% @number.each { |nr| -%>
+number = <%= nr %>
+<% } -%>
