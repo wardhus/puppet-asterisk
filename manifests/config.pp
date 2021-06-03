@@ -54,7 +54,7 @@ class asterisk::config {
   }
 
   $http_enable = $asterisk::real_http_enable
-  $http_servername = $asterisk::servername
+  $http_servername = $asterisk::http_servername
   asterisk::dotd { "${asterisk::confdir}/http":
     content => template('asterisk/http.conf.erb'),
   }
