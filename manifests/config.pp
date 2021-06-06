@@ -53,12 +53,6 @@ class asterisk::config {
     content => template('asterisk/followme.conf.erb'),
   }
 
-  $http_enable = $asterisk::real_http_enable
-  $http_servername = $asterisk::http_servername
-  asterisk::dotd { "${asterisk::confdir}/http":
-    content => template('asterisk/http.conf.erb'),
-  }
-
   $ext_context = {
     general => $asterisk::real_extensions_general,
     globals => $asterisk::extensions_globals,
@@ -80,6 +74,16 @@ class asterisk::config {
   $queues_general = $asterisk::real_queues_general
   asterisk::dotd { "${asterisk::confdir}/queues":
     content => template('asterisk/queues.conf.erb'),
+  }
+
+  $logger_options = $asterisk::logger_options
+  asterisk::dotd { '/etc/asterisk/logger':
+    content => template('asterisk/logger.conf.erb'),
+  }
+
+  $http_options = $asterisk::http_options
+  asterisk::dotd { '/etc/asterisk/http':
+    content => template('asterisk/http.conf.erb'),
   }
 
   $manager_enable = $asterisk::real_manager_enable

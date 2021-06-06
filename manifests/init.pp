@@ -94,10 +94,6 @@
 # @param manager_bindaddr
 #   IP address to have asterisk bind to for manager connections. Defaults to
 #   binding to localhost.
-# @param http_enable
-#   Set this to true to enable asterisk mini http server.
-# @param http_servername
-#   Set the mini http server's server name
 #
 class asterisk (
   Boolean                        $manage_service          = true,
@@ -115,6 +111,8 @@ class asterisk (
   Hash                           $agents_global           = {},
   Asterisk::FeaturesGeneral      $features_general        = $asterisk::params::features_general,
   Asterisk::Featuremap           $features_featuremap     = {},
+  Hash                           $logger_options          = $asterisk::params::logger_options,
+  Hash                           $http_options            = $asterisk::params::http_options,
   Hash[String,String]            $features_applicationmap = {},
   Hash                           $queues_general          = {},
   Boolean                        $modules_autoload        = true,
@@ -125,8 +123,6 @@ class asterisk (
   Boolean                        $manager_webenable       = false,
   Integer                        $manager_port            = 5038,
   String                         $manager_bindaddr        = '127.0.0.1',
-  Boolean                        $http_enable             = false,
-  String                         $http_servername         = 'asterisk'
 ) inherits asterisk::params {
 
   # We'll only ensure the type of some of the *_general on which templates iterate

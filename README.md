@@ -84,6 +84,8 @@ how general configuration is set.
 
   * `$queues_general` is detailed in the Queues Options section.
 
+  * `$http_options` is detailed in the Asterisk Built-in HTTP Server section.
+
   * `$modules_autoload`, `$modules_noload`, `$modules_load` and
     `$modules_global` are detailed in the Modules section.
 
@@ -537,6 +539,29 @@ $queues_general = {
 }
 ```
 
+Asterisk Built-in HTTP Server
+------
+
+The core of Asterisk provides a basic HTTP/HTTPS server. To enable the server, you can use the `asterisk::http_options` parameter. For passing in settings, you need to send a hash to the asterisk class with the http_options parameter.
+
+Here is the default hash with the default values, as defined in params.pp::
+
+```puppet
+  $http_options = {
+    'bindaddr'            => '127.0.0.1',
+    'enabled'             => 'yes',
+    'bindport'            => 8080,
+    'prefix'              => 'asterisk',
+    'sessionlimit'        => 100,
+    'session_inactivity'  => 30000,
+    'session_keep_alive' => '15000',
+    'enablestatic'        => 'yes',
+  }
+```
+
+See:
+https://wiki.asterisk.org/wiki/display/AST/Asterisk+Builtin+mini-HTTP+Server
+
 Modules
 -------
 
@@ -774,4 +799,3 @@ or one of its clones.
 The license text can also be downloaded from:
 
 https://www.gnu.org/licenses/gpl-3.0.txt
-

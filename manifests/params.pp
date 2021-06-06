@@ -81,6 +81,25 @@ class asterisk::params {
     'monitor-type'      => 'MixMonitor',
   }
 
+  $logger_options = {
+    'rotatestrategy' => 'rotate',
+    'use_callids'    => 'yes',
+    'appendhostname' => 'yes',
+    'queue_log'      => 'yes',
+  }
+
+  $http_options = {
+    'bindaddr'           => '127.0.0.1',
+    'enabled'            => 'yes',
+    'webenabled'         => 'yes',
+    'bindport'           => 8080,
+    'prefix'             => 'asterisk',
+    'sessionlimit'       => 100,
+    'session_inactivity' => 30000,
+    'session_keep_alive' => '15000',
+    'enablestatic'       => 'yes',
+  }
+
   $modules_noload = [
     'pbx_gtkconsole.so',
     'pbx_kdeconsole.so',
