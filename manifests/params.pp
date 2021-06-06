@@ -89,15 +89,15 @@ class asterisk::params {
   }
 
   $http_options = {
-    'bindaddr'           => '127.0.0.1',
     'enabled'            => 'yes',
-    'webenabled'         => 'yes',
-    'bindport'           => 8080,
+    'bindaddr'           => '0.0.0.0',
+    'bindport'           => 8088,
     'prefix'             => 'asterisk',
     'sessionlimit'       => 100,
     'session_inactivity' => 30000,
-    'session_keep_alive' => '15000',
-    'enablestatic'       => 'yes',
+    'session_keep_alive' => 15000,
+    'enable_static'      => 'yes',
+    'enable_status'      => 'yes',
   }
 
   $modules_noload = [
