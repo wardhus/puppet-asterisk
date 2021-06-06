@@ -155,8 +155,6 @@ class asterisk (
   $real_manager_enable = bool2str($manager_enable, 'yes', 'no')
   $real_manager_webenable = bool2str($manager_webenable, 'yes', 'no')
 
-  $real_http_enable = bool2str($http_enable, 'yes', 'no')
-
   contain asterisk::install
   contain asterisk::config
   contain asterisk::service
