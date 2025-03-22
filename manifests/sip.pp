@@ -170,7 +170,8 @@
 #   If Remote-Party-ID SIP header should be trusted. Defaults to `no`.
 #
 define asterisk::sip (
-  $ensure                                                       = present,
+  Stdlib::Ensure::File::File                 $ensure            = file,
+  # lint:ignore:optional_default
   Optional[String[1]]                        $template_name     = undef,
   Optional[String[1]]                        $account_type      = 'friend',
   Optional[String[1]]                        $username          = undef,
@@ -179,7 +180,7 @@ define asterisk::sip (
   Optional[String[1]]                        $md5secret         = undef,
   Optional[Sensitive[String[1]]]             $remotesecret      = undef,
   Optional[String[1]]                        $context           = undef,
-  Optional[String[1]]                        $canreinvite       = 'no',
+  Optional[String[1]]                        $canreinvite       = undef,
   Optional[String[1]]                        $directmedia       = 'no',
   Optional[Boolean]                          $directrtpsetup    = true,
   Array[String[1]]                           $directmediadeny   = [],
@@ -203,11 +204,20 @@ define asterisk::sip (
   Array[String[1]]                           $allow             = [],
   Optional[String[1]]                        $dtmfmode          = undef,
   Array[String[1]]                           $transports        = [],
-  Optional[String]                           $encryption        = '',
+  Optional[String]                           $encryption        = undef,
   Array[Asterisk::Access]                    $access            = [],
   Optional[Enum['yes', 'no']]                $trustrpid         = undef,
   Optional[Enum['yes', 'no', 'pai', 'rpid']] $sendrpid          = undef
+  # lint:endignore
 ) {
+  if $canreinvite !~ Undef {
+    deprecation(@(DEPRECATED_OPTION)
+      The option "canreinvite" was deprecated by asterisk and replaced with
+      directmedia. You should check asterisk documentation and use the new
+      option instead.
+      | DEPRECATED_OPTION
+      )
+  }
 
   if $directrtpsetup =~ Boolean {
     $real_directrtpsetup = bool2str($directrtpsetup, 'yes', 'no')
@@ -216,10 +226,49 @@ define asterisk::sip (
     $real_directrtpsetup = $directrtpsetup
   }
 
+  $sip_variables = {
+    peer_name         => $name,
+    template_name     => $template_name,
+    account_type      => $account_type,
+    username          => $username,
+    defaultuser       => $defaultuser,
+    secret            => $secret,
+    md5secret         => $md5secret,
+    remotesecret      => $remotesecret,
+    context           => $context,
+    canreinvite       => $canreinvite,
+    directmedia       => $directmedia,
+    directrtpsetup    => $directrtpsetup,
+    directmediadeny   => $directmediadeny,
+    directmediapermit => $directmediapermit,
+    host              => $host,
+    insecure          => $insecure,
+    language          => $language,
+    nat               => $nat,
+    qualify           => $qualify,
+    vmexten           => $vmexten,
+    callerid          => $callerid,
+    call_limit        => $call_limit,
+    callgroup         => $callgroup,
+    mailbox           => $mailbox,
+    pickupgroup       => $pickupgroup,
+    fromdomain        => $fromdomain,
+    fromuser          => $fromuser,
+    outboundproxy     => $outboundproxy,
+    t38pt_udptl       => $t38pt_udptl,
+    disallow          => $disallow,
+    allow             => $allow,
+    dtmfmode          => $dtmfmode,
+    transports        => $transports,
+    encryption        => $encryption,
+    access            => $access,
+    trustrpid         => $trustrpid,
+    sendrpid          => $sendrpid,
+  }
   asterisk::dotd::file { "sip_${name}.conf":
     ensure   => $ensure,
     dotd_dir => 'sip.d',
-    content  => template('asterisk/snippet/sip.erb'),
+    content  => epp('asterisk/snippet/sip.epp', $sip_variables),
     filename => "${name}.conf",
   }
 }

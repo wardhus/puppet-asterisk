@@ -43,7 +43,7 @@
 #
 define asterisk::manager (
   Sensitive[String[1]]          $secret,
-  $ensure                                        = present,
+  Stdlib::Ensure::File::File    $ensure          = file,
   String[1]                     $manager_name    = $name,
   Array[String[1]]              $deny            = ['0.0.0.0/0.0.0.0'],
   Array[String[1]]              $permit          = ['127.0.0.1/255.255.255.255'],
@@ -53,7 +53,6 @@ define asterisk::manager (
   Boolean                       $displayconnects = true,
   Optional[String]              $eventfilter     = undef,
 ) {
-
   $wo_rights = ['config','command','originate']
   $wo_rights.each |String $right| {
     if $right in $read {
@@ -68,13 +67,21 @@ define asterisk::manager (
     }
   }
 
-  $real_displayconnects = bool2str($displayconnects, 'yes', 'no')
-
+  $manager_variables = {
+    manager_name    => $manager_name,
+    secret          => $secret,
+    deny            => $deny,
+    permit          => $permit,
+    read            => $read,
+    write           => $write,
+    writetimeout    => $writetimeout,
+    displayconnects => bool2str($displayconnects, 'yes', 'no'),
+    eventfilter     => $eventfilter,
+  }
   asterisk::dotd::file { "manager_${name}.conf":
     ensure   => $ensure,
     dotd_dir => 'manager.d',
-    content  => template('asterisk/snippet/manager.erb'),
+    content  => epp('asterisk/snippet/manager.epp', $manager_variables),
     filename => "${name}.conf",
   }
-
 }

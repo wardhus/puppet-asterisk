@@ -23,18 +23,22 @@
 #   List of groups to which the agent is associated.
 #
 define asterisk::agent (
-  String                    $ext,
-  Sensitive[String]         $password,
-  String                    $agent_name,
-  Enum['present', 'absent'] $ensure = present,
-  Array[String[1]]          $groups = []
+  String                     $ext,
+  Sensitive[String]          $password,
+  String                     $agent_name,
+  Stdlib::Ensure::File::File $ensure = file,
+  Array[String[1]]           $groups = []
 ) {
-
+  $agent_variables = {
+    groups     => $groups,
+    ext        => $ext,
+    password   => $password,
+    agent_name => $agent_name,
+  }
   asterisk::dotd::file { "agent_${name}.conf":
     ensure   => $ensure,
     dotd_dir => 'agents.d',
-    content  => template('asterisk/snippet/agent.erb'),
+    content  => epp('asterisk/snippet/agent.epp', $agent_variables),
     filename => "${name}.conf",
   }
-
 }
