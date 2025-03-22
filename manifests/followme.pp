@@ -22,7 +22,7 @@ define asterisk::followme (
 ) {
 
   asterisk::dotd::file { "followme_${name}.conf":
-    ensure   => $ensure,
+    ensure   => file,
     dotd_dir => 'followme.d',
     content  => template('asterisk/snippet/followme.erb'),
     filename => "${name}.conf",

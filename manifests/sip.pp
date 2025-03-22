@@ -211,11 +211,11 @@ define asterisk::sip (
   # lint:endignore
 ) {
   if $canreinvite !~ Undef {
-    deprecation(@(DEPRECATED_OPTION)
-      The option "canreinvite" was deprecated by asterisk and replaced with
+    deprecation(
+      $module_name,
+      'The option "canreinvite" was deprecated by asterisk and replaced with
       directmedia. You should check asterisk documentation and use the new
-      option instead.
-      | DEPRECATED_OPTION
+      option instead.'
       )
   }
 
