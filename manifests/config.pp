@@ -24,6 +24,7 @@ class asterisk::config {
   $cf_with_directory = [
     'iax',
     'sip',
+    'pjsip',
     'voicemail',
     'extensions',
     'agents',
