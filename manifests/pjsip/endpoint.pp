@@ -52,14 +52,18 @@
 # @see https://docs.asterisk.org/Latest_API/API_Documentation/Dialplan_Functions/PJSIP_ENDPOINT/
 #      for more information on PJSIP configuration in Asterisk.
 define asterisk::pjsip::endpoint (
-  Enum['present', 'absent'] $ensure    = 'present',
-  String                    $transport = undef,
-  String                    $aors      = $name,
-  String                    $auth      = undef,
-  String                    $context   = 'default',
-  String                    $disallow  = 'all',
-  String                    $allow     = undef,
-  Enum['yes', 'no']         $direct_media = 'yes',
+  Enum['present', 'absent'] $ensure        = 'present',
+  Optional[String]          $transport     = undef,
+  String                    $aors          = $name,
+  Optional[String]          $auth          = undef,
+  Optional[String]          $outbound_auth = undef,
+  Optional[String]          $send_rpid     = undef,
+  Optional[String]          $from_user     = undef,
+  Optional[String]          $from_domain   = undef,
+  String                    $context       = 'default',
+  String                    $disallow      = 'all',
+  String                    $allow         = undef,
+  Enum['yes', 'no']         $direct_media  = 'yes',
 ) {
   Ini_setting {
     ensure  => $ensure,
@@ -113,5 +117,33 @@ define asterisk::pjsip::endpoint (
   ini_setting { "endpoint-${name}-direct_media":
     setting => 'direct_media',
     value   => $direct_media,
+  }
+
+  if $outbound_auth {
+    ini_setting { "endpoint-${name}-outbound_auth":
+      setting => 'outbound_auth',
+      value   => $outbound_auth,
+    }
+  }
+
+  if $send_rpid {
+    ini_setting { "endpoint-${name}-send_rpid":
+      setting => 'send_rpid',
+      value   => $send_rpid,
+    }
+  }
+
+  if $from_user {
+    ini_setting { "endpoint-${name}-from_user":
+      setting => 'from_user',
+      value   => $from_user,
+    }
+  }
+
+  if $from_domain {
+    ini_setting { "endpoint-${name}-from_domain":
+      setting => 'from_domain',
+      value   => $from_domain,
+    }
   }
 }

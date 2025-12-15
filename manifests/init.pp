@@ -176,6 +176,7 @@ class asterisk (
   Stdlib::CreateResources        $iax_contexts,
   Stdlib::CreateResources        $iax_registries,
   Hash                           $sip_general,
+  Hash                           $pjsip_general,
   Stdlib::CreateResources        $sip_peers,
   Stdlib::CreateResources        $sip_registries,
   Hash                           $voicemail_general,

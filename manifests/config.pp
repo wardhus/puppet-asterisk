@@ -87,6 +87,12 @@ class asterisk::config {
         options   => $asterisk::sip_general,
       },
     },
+    pjsip => {
+      general => {
+        delimiter => '=',
+        options   => $asterisk::pjsip_general,
+      },
+    },
     voicemail => {
       general => {
         delimiter => '=',

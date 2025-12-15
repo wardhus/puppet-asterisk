@@ -41,11 +41,15 @@
 #   The Asterisk service will be notified and reloaded if the configuration changes.
 define asterisk::pjsip::registration (
   Enum['present', 'absent'] $ensure          = 'present',
-  String                    $transport       = undef,
+  Optional[String]          $transport       = undef,
   String                    $outbound_auth   = undef,
   String                    $server_uri      = undef,
   String                    $client_uri      = undef,
   Integer                   $retry_interval  = 60,
+  String                    $contact_user    = undef,
+  String                    $auth_rejection_permanent = undef,
+  Integer                   $forbidden_retry_interval = undef,
+  Integer                   $max_retries              = undef,
 ) {
   Ini_setting {
     ensure  => $ensure,
@@ -91,5 +95,23 @@ define asterisk::pjsip::registration (
   ini_setting { "registration-${name}-retry_interval":
     setting => 'retry_interval',
     value   => $retry_interval,
+  }
+
+
+  ini_setting { "registration-${name}-contact_user":
+    setting => 'contact_user',
+    value   => $contact_user,
+  }
+  ini_setting { "registration-${name}-auth_rejection_permanent":
+    setting => 'auth_rejection_permanent',
+    value   => $auth_rejection_permanent,
+  }
+  ini_setting { "registration-${name}-forbidden_retry_interval":
+    setting => 'forbidden_retry_interval',
+    value   => $forbidden_retry_interval,
+  }
+  ini_setting { "registration-${name}-max_retries":
+    setting => 'max_retries',
+    value   => $max_retries,
   }
 }
