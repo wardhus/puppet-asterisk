@@ -26,10 +26,6 @@
 #   (String) IP address to bind the transport to.
 #   Default: '0.0.0.0'
 #
-# @param port
-#   (Integer) Port to listen on.
-#   Default: 5060
-#
 # @param local_net
 #   (Optional[String]) Local network subnet for NAT handling.
 #   Default: undef
@@ -49,7 +45,6 @@ define asterisk::pjsip::transport (
   Enum['present', 'absent'] $ensure                     = 'present',
   Enum['udp', 'tcp']        $protocol                   = 'udp',
   String                    $bind                       = '0.0.0.0',
-  Integer                   $port                       = 5060,
   Optional[String]          $local_net                  = undef,
   Optional[String]          $external_media_address     = undef,
   Optional[String]          $external_signaling_address = undef,
@@ -75,11 +70,6 @@ define asterisk::pjsip::transport (
   ini_setting { "transport-${name}-bind":
     setting => 'bind',
     value   => $bind,
-  }
-
-  ini_setting { "transport-${name}-port":
-    setting => 'port',
-    value   => $port,
   }
 
   if $local_net {
