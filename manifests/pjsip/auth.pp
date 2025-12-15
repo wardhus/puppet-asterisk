@@ -30,10 +30,10 @@
 #   This class creates a configuration file at `/etc/asterisk/pjsip.d/auth-${name}.conf`.
 #   The Asterisk service will be notified and reloaded if the configuration changes.
 define asterisk::pjsip::auth (
-  Enum['present', 'absent'] $ensure    = 'present',
-  String                    $username  = $name,
-  String                    $password  = undef,
-  Enum['userpass', 'md5']   $auth_type = 'userpass',
+  Enum['present', 'absent']          $ensure    = 'present',
+  String                             $username  = $name,
+  Variant[String, Sensitive[String]] $password  = undef,
+  Enum['userpass', 'md5']            $auth_type = 'userpass',
 ) {
   Ini_setting {
     ensure  => $ensure,
