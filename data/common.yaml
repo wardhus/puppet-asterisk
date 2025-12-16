@@ -18,7 +18,8 @@ asterisk::iax_general:
   autokill: 'yes'
   # Some added security default options
   delayreject: 'yes'
-asterisk::pjsip_general: []
+asterisk::pjsip_general:
+  allow: []
 asterisk::sip_general:
   disallow: []
   allow: []
