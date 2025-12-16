@@ -52,14 +52,14 @@
 # @see https://wiki.asterisk.org/wiki/display/AST/PJSIP+Configuration+Files
 #      for more information on PJSIP configuration in Asterisk.
 define asterisk::pjsip::aor (
-  Enum['present', 'absent'] $ensure            = 'present',
-  Integer                   $max_contacts       = 1,
-  Enum['yes', 'no']         $remove_existing    = 'yes',
-  Enum['yes', 'no']         $qualify            = 'no',
-  Integer                   $qualify_frequency  = 60,
-  Optional[String]          $contact            = undef,
-  Integer                   $default_expiration = 3600,
-  Integer                   $minimum_expiration = 60,
+  Enum['present', 'absent']   $ensure            = 'present',
+  Optional[Integer]           $max_contacts       = undef,
+  Optional[Enum['yes', 'no']] $remove_existing    = undef,
+  Optional[Enum['yes', 'no']] $qualify            = undef,
+  Optional[Integer]           $qualify_frequency  = undef,
+  Optional[String]            $contact            = undef,
+  Optional[Integer]           $default_expiration = undef,
+  Optional[Integer]           $minimum_expiration = undef,
 ) {
   Ini_setting {
     ensure  => $ensure,
@@ -74,24 +74,32 @@ define asterisk::pjsip::aor (
     value   => 'aor',
   }
 
-  ini_setting { "aor-${name}-max_contacts":
-    setting => 'max_contacts',
-    value   => $max_contacts,
+  if $max_contacts {
+    ini_setting { "aor-${name}-max_contacts":
+      setting => 'max_contacts',
+      value   => $max_contacts,
+    }
   }
 
-  ini_setting { "aor-${name}-remove_existing":
-    setting => 'remove_existing',
-    value   => $remove_existing,
+  if $remove_existing {
+    ini_setting { "aor-${name}-remove_existing":
+      setting => 'remove_existing',
+      value   => $remove_existing,
+    }
   }
 
-  ini_setting { "aor-${name}-qualify":
-    setting => 'qualify',
-    value   => $qualify,
+  if $qualify {
+    ini_setting { "aor-${name}-qualify":
+      setting => 'qualify',
+      value   => $qualify,
+    }
   }
 
-  ini_setting { "aor-${name}-qualify_frequency":
-    setting => 'qualify_frequency',
-    value   => $qualify_frequency,
+  if $qualify_frequency {
+    ini_setting { "aor-${name}-qualify_frequency":
+      setting => 'qualify_frequency',
+      value   => $qualify_frequency,
+    }
   }
 
   if $contact {
@@ -101,14 +109,18 @@ define asterisk::pjsip::aor (
     }
   }
 
-  ini_setting { "aor-${name}-default_expiration":
-    setting => 'default_expiration',
-    value   => $default_expiration,
+  if $default_expiration {
+    ini_setting { "aor-${name}-default_expiration":
+      setting => 'default_expiration',
+      value   => $default_expiration,
+    }
   }
 
-  ini_setting { "aor-${name}-minimum_expiration":
-    setting => 'minimum_expiration',
-    value   => $minimum_expiration,
+  if minimum_expiration {
+    ini_setting { "aor-${name}-minimum_expiration":
+      setting => 'minimum_expiration',
+      value   => $minimum_expiration,
+    }
   }
 }
 
