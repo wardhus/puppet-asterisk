@@ -14,36 +14,36 @@
 #   }
 #
 # @param ensure
-#   (Enum['present', 'absent']) Whether the AOR configuration should exist or not.
+#   (Optional[Enum['present', 'absent']]) Whether the AOR configuration should exist or not.
 #   Default: 'present'
 #
 # @param max_contacts
-#   (Integer) Maximum number of contacts that can bind to this AOR.
-#   Default: 1
+#   (Optional[Integer]) Maximum number of contacts that can bind to this AOR.
+#   Default: undef
 #
 # @param remove_existing
-#   (Enum['yes', 'no']) Whether to remove existing contacts that are not currently registered.
-#   Default: 'yes'
+#   (Optional[Enum['yes', 'no']]) Whether to remove existing contacts that are not currently registered.
+#   Default: undef
 #
 # @param qualify
-#   (Enum['yes', 'no']) Whether to periodically qualify the contact(s) associated with this AOR.
-#   Default: 'no'
+#   (Optional[Enum['yes', 'no']]) Whether to periodically qualify the contact(s) associated with this AOR.
+#   Default: undef
 #
 # @param qualify_frequency
-#   (Integer) Interval (in seconds) at which to qualify the contact(s).
-#   Default: 60
+#   (Optional[Integer]) Interval (in seconds) at which to qualify the contact(s).
+#   Default: undef
 #
 # @param contact
-#   (Optional[String]) Explicit contact address for this AOR.
+#   (Optional[String]]) Explicit contact address for this AOR.
 #   Default: undef
 #
 # @param default_expiration
-#   (Integer) Default expiration time (in seconds) for contacts binding to this AOR.
-#   Default: 3600
+#   (Optional[Integer]) Default expiration time (in seconds) for contacts binding to this AOR.
+#   Default: undef
 #
 # @param minimum_expiration
-#   (Integer) Minimum expiration time (in seconds) for contacts binding to this AOR.
-#   Default: 60
+#   (Optional[Integer]) Minimum expiration time (in seconds) for contacts binding to this AOR.
+#   Default: undef
 #
 # @note
 #   This class creates a configuration file at `/etc/asterisk/pjsip.d/aor-${name}.conf`.
@@ -62,7 +62,7 @@ define asterisk::pjsip::aor (
   Optional[Integer]           $minimum_expiration = undef,
 ) {
   Ini_setting {
-    ensure  => $ensure,
+    ensure  => absent,
     path    => "/etc/asterisk/pjsip.d/aor-${name}.conf",
     section => $name,
     require => File['/etc/asterisk/pjsip.d/'],
@@ -70,57 +70,79 @@ define asterisk::pjsip::aor (
   }
 
   ini_setting { "aor-${name}-type":
+    ensure  => $ensure,
     setting => 'type',
     value   => 'aor',
   }
 
-  if $max_contacts {
-    ini_setting { "aor-${name}-max_contacts":
-      setting => 'max_contacts',
-      value   => $max_contacts,
-    }
+  $max_contacts_ensure = $max_contacts ? {
+    undef   => 'absent',
+    default => 'present',
+  }
+  ini_setting { "aor-${name}-max_contacts":
+    ensure  => $max_contacts_ensure,
+    setting => 'max_contacts',
+    value   => $max_contacts,
   }
 
-  if $remove_existing {
-    ini_setting { "aor-${name}-remove_existing":
-      setting => 'remove_existing',
-      value   => $remove_existing,
-    }
+  $remove_existing_ensure = $remove_existing ? {
+    undef   => 'absent',
+    default => 'present',
+  }
+  ini_setting { "aor-${name}-remove_existing":
+    ensure  => $remove_existing_ensure,
+    setting => 'remove_existing',
+    value   => $remove_existing,
   }
 
-  if $qualify {
-    ini_setting { "aor-${name}-qualify":
-      setting => 'qualify',
-      value   => $qualify,
-    }
+  $qualify_ensure = $qualify ? {
+    undef   => 'absent',
+    default => 'present',
+  }
+  ini_setting { "aor-${name}-qualify":
+    ensure  => $qualify_ensure,
+    setting => 'qualify',
+    value   => $qualify,
   }
 
-  if $qualify_frequency {
-    ini_setting { "aor-${name}-qualify_frequency":
-      setting => 'qualify_frequency',
-      value   => $qualify_frequency,
-    }
+  $qualify_frequency_ensure = $qualify_frequency ? {
+    undef   => 'absent',
+    default => 'present',
+  }
+  ini_setting { "aor-${name}-qualify_frequency":
+    ensure  => $qualify_frequency_ensure,
+    setting => 'qualify_frequency',
+    value   => $qualify_frequency,
   }
 
-  if $contact {
-    ini_setting { "aor-${name}-contact":
-      setting => 'contact',
-      value   => $contact,
-    }
+  $contact_ensure = $contact ? {
+    undef   => 'absent',
+    default => 'present',
+  }
+  ini_setting { "aor-${name}-contact":
+    ensure  => $contact_ensure,
+    setting => 'contact',
+    value   => $contact,
   }
 
-  if $default_expiration {
-    ini_setting { "aor-${name}-default_expiration":
-      setting => 'default_expiration',
-      value   => $default_expiration,
-    }
+  $default_expiration_ensure = $default_expiration ? {
+    undef   => 'absent',
+    default => 'present',
+  }
+  ini_setting { "aor-${name}-default_expiration":
+    ensure  => $default_expiration_ensure,
+    setting => 'default_expiration',
+    value   => $default_expiration,
   }
 
-  if minimum_expiration {
-    ini_setting { "aor-${name}-minimum_expiration":
-      setting => 'minimum_expiration',
-      value   => $minimum_expiration,
-    }
+  $minimum_expiration_ensure = $minimum_expiration ? {
+    undef   => 'absent',
+    default => 'present',
+  }
+  ini_setting { "aor-${name}-minimum_expiration":
+    ensure  => $minimum_expiration_ensure,
+    setting => 'minimum_expiration',
+    value   => $minimum_expiration,
   }
 }
 
